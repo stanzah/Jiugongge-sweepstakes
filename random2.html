@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>九宫格抽奖</title>
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        html{
+            width: 100%;
+            height: 100%;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+    	.main{
+    		width: 650px;
+    		margin: 0 auto;
+    		text-align: center;
+    		padding: 0;
+            position: relative;
+    	}
+        .main div{
+            width: 202px;
+            height: 202px;
+            padding:0;
+            background-color: #FFF;
+            float: left;
+        }
+    	.main img{ 
+            width: 200px;
+            height: 200px;  	
+            margin: 0px;	
+    		border: 1px solid #ddd;
+    	}
+        .main button{
+            width: 202px;
+            height: 202px;
+            padding:0;
+            float: left;
+            border: 0;
+        }
+        .alert{
+            display: none;
+            position: absolute;
+            z-index: 2;
+        }
+        .mention{
+            width: 20%;
+            height: 10%;
+            background-color: #ddd;
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+
+    	$(document).ready(function(){
+    		
+            var timer=null,    		
+    		    index=0,	   			
+    		    num=0,		   
+    			i=0;
+    		timer=setInterval(autoPlay,100);   
+    		$("#btn").click(lottery);         //点击抽奖图片开始抽奖
+            $("#close").click(closeBtn);     //点击弹窗按钮关闭弹窗
+        
+    		//点击按钮之后执行的抽奖操作
+    		function lottery(){
+                console.log("开始抽奖");
+    			$("#btn").attr("disabled","disabled");
+    			stop();
+                backTo0();
+    			randomNum();
+    			var round=Math.floor(num/8);    //圈数 
+    			var lastNum=num-round*8;
+    		    var n=0;      					//计数
+                timer=setInterval(function(){
+	    		   	n++;
+	    		   	if(n===num){
+	    		   		stop();                                            //停止转动
+	    		   		$("#btn").removeAttr("disabled");                  //解除按钮不可点击状态
+                          var name=document.getElementById(lastNum).alt;
+                          console.log(lastNum);
+                          console.log(name);
+                        $("p").append("恭喜您中奖了！"+'<br>'+"奖品为"+name);  //将中奖文本写入p中
+                        $("#alert").css('display','block');                //跳出中奖信息
+	    		   	}
+	    			autoPlay();
+	    		},100);
+    		}	    			
+
+           
+    		
+            //初始化，移动光标至0
+            function backTo0(){
+                for(i=0; i<8; i++){
+                    document.getElementById(i).style.borderColor="#ddd";         
+                    document.getElementById(i).style.className="";
+                    document.getElementById(i).style.opacity=0.7;
+                }
+                 document.getElementById(0).style.borderColor="#000";
+                 document.getElementById(0).style.className="chosen";
+                 document.getElementById(0).style.opacity=1.0;
+                 i=0;index=0;
+            }
+
+    		//停止转动
+    		function stop(){
+    			clearInterval(timer); 
+    		}
+
+    		//取随机数
+    		function randomNum(){
+    			num=Math.floor(Math.random()*40);
+    			if(num<20){
+    				num+=10;
+    			}
+    		}
+            
+            //关闭弹窗+清除文本
+            function closeBtn(){
+                $("#alert").css('display','none');
+                $('p').html("");
+            }
+
+    		//自动播放动画
+    		function autoPlay(){	
+    			index++;
+    			if(index==8){
+    				index=0;	
+    			}
+    		   
+    			for(i=0; i<8; i++){
+    				document.getElementById(i).style.borderColor="#ddd"; 
+    				document.getElementById(i).style.className="";
+                    document.getElementById(i).style.opacity=0.7;
+    			}								     
+    			 document.getElementById(index).style.borderColor="#FF0000";
+				 document.getElementById(index).style.className="chosen";
+                 document.getElementById(index).style.opacity=1.0;
+    		}
+    	
+        })
+
+           
+    </script>
+</head>
+<body>
+   
+    <div class="alert" style="width:100%;height:100%" id="alert"><!--蒙版-->
+        <div id="mention" class="mention"> 
+            <p></p>
+            <input type="button" value="点我关闭" id="close">
+        </div>
+    </div>
+
+	<div class="main" id="all"><!--抽奖主页面-->
+		<div><img id="0" src="http://img4.imgtn.bdimg.com/it/u=4265723287,1222132789&fm=26&gp=0.jpg" alt="汽车"></div>
+		<div><img id="1" src="http://img4.imgtn.bdimg.com/it/u=3133098537,3151266209&fm=26&gp=0.jpg" alt="美女"></div>
+		<div><img id="2" src="http://img3.imgtn.bdimg.com/it/u=1383674867,1626846022&fm=26&gp=0.jpg" alt="电脑"></div>
+		<div><img id="7" src="http://jf.10086.cn/pic/ware/50/50/345977_1307503892639_480.jpg" alt="话费"></div>
+		<div class="btn">
+            <button id="btn">
+                <img src="http://i64.tinypic.com/ipoyut.jpg">
+            </button>
+        </div>
+		<div><img id="3" src="http://jiangsu.china.com.cn/uploadfile/2012/1030/20121030103823736.jpg" alt="手机"></div>
+		<div><img id="6" src="http://img5.imgtn.bdimg.com/it/u=2999619320,2348425189&fm=200&gp=0.jpg" alt="现金"></div>
+		<div><img id="5" src="http://img2.imgtn.bdimg.com/it/u=3423081023,228489933&fm=26&gp=0.jpg" alt="球鞋"></div>
+		<div><img id="4" src="http://img4.imgtn.bdimg.com/it/u=1240953943,3185741965&fm=200&gp=0.jpg" alt="钢琴"></div>
+	</div>
+   
+</body>
+</html>
